@@ -1,4 +1,4 @@
-package com.example.mdboard;
+package com.example.mdboard.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
