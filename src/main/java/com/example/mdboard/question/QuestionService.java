@@ -2,6 +2,9 @@ package com.example.mdboard.question;
 
 import com.example.mdboard.ex.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +24,11 @@ public class QuestionService {
         Optional<Question> oq = questionRepository.findById(id);
         if (oq.isEmpty()) throw new DataNotFoundException("question not found");
         return oq.get();
+    }
+
+    public Page<Question> getList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return questionRepository.findAll(pageable);
     }
 
     public void create(String subject, String content) {

@@ -25,17 +25,13 @@ public class InitDb {
     }
 
     public void addQuestions() {
-        Question question1 = new Question();
-        question1.setSubject("제목1");
-        question1.setContent("내용1");
-        question1.setCreateDate(LocalDateTime.now());
-        questionRepository.save(question1);
-
-        Question question2 = new Question();
-        question2.setSubject("제목2");
-        question2.setContent("내용2");
-        question2.setCreateDate(LocalDateTime.now());
-        questionRepository.save(question2);
+        for (int i = 1; i <= 300; i++) {
+            Question question = new Question();
+            question.setSubject("제목 " + i);
+            question.setContent("내용 " + i);
+            question.setCreateDate(LocalDateTime.now());
+            questionRepository.save(question);
+        }
     }
 
     public void addAnswers() {
