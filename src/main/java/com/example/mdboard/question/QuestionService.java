@@ -35,11 +35,12 @@ public class QuestionService {
         return questionRepository.findAll(pageable);
     }
 
-    public void create(String subject, String content) {
+    public Question create(String subject, String content) {
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
         question.setCreateDate(LocalDateTime.now());
         questionRepository.save(question);
+        return question;
     }
 }

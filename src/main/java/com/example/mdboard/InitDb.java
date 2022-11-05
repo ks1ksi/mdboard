@@ -6,43 +6,50 @@ import com.example.mdboard.question.Question;
 import com.example.mdboard.question.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Component
 @RequiredArgsConstructor
+@Component
 public class InitDb {
-
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final InitService initService;
 
     @PostConstruct
     public void init() {
-        addQuestions();
-        addAnswers();
+        initService.addQuestions();
+        initService.addAnswers();
     }
 
-    public void addQuestions() {
-        for (int i = 1; i <= 300; i++) {
-            Question question = new Question();
-            question.setSubject("제목 " + i);
-            question.setContent("내용 " + i);
-            question.setCreateDate(LocalDateTime.now());
-            questionRepository.save(question);
+    @RequiredArgsConstructor
+    @Component
+    static class InitService {
+        private final QuestionRepository questionRepository;
+        private final AnswerRepository answerRepository;
+
+        @Transactional
+        public void addQuestions() {
+            for (int i = 1; i <= 300; i++) {
+                Question question = new Question();
+                question.setSubject("제목 " + i);
+                question.setContent("내용 " + i);
+                question.setCreateDate(LocalDateTime.now());
+                questionRepository.save(question);
+            }
+        }
+
+        @Transactional
+        public void addAnswers() {
+            for (Question question : questionRepository.findAll()) {
+                Answer answer = new Answer();
+                answer.setContent("답변");
+                answer.setCreateDate(LocalDateTime.now());
+                answer.setMyQuestion(question);
+                answerRepository.save(answer);
+            }
         }
     }
 
-    public void addAnswers() {
-        List<Question> questionList = questionRepository.findAll();
-        for (Question question : questionList) {
-            Answer answer = new Answer();
-            answer.setContent("댓글");
-            answer.setCreateDate(LocalDateTime.now());
-            answer.setMyQuestion(question);
-            answerRepository.save(answer);
-        }
-    }
 
 }

@@ -80,6 +80,7 @@ public class RepositoryTest {
         this.questionRepository.save(q);
 
         Answer a = new Answer();
+//        a.setQuestion(q);
         a.setMyQuestion(q);
         a.setContent("답변");
         a.setCreateDate(LocalDateTime.now());
