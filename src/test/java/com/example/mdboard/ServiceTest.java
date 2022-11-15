@@ -26,7 +26,8 @@ public class ServiceTest {
         Answer answer2 = answerService.create(question, "답변2");
 
         Assertions.assertEquals(2, question.getAnswerList().size());
-
+        Assertions.assertSame(question, answer1.getQuestion());
+        Assertions.assertSame(question, answer2.getQuestion());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.mdboard.answer;
 
 import com.example.mdboard.question.Question;
-import com.example.mdboard.question.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
