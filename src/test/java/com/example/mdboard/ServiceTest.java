@@ -21,9 +21,9 @@ public class ServiceTest {
     @Test
     @Transactional
     void getAnswerListTest() {
-        Question question = questionService.create("제목", "내용");
-        Answer answer1 = answerService.create(question, "답변");
-        Answer answer2 = answerService.create(question, "답변2");
+        Question question = questionService.create("제목", "내용", null);
+        Answer answer1 = answerService.create(question, "답변", null);
+        Answer answer2 = answerService.create(question, "답변2", null);
 
         Assertions.assertEquals(2, question.getAnswerList().size());
         Assertions.assertSame(question, answer1.getQuestion());

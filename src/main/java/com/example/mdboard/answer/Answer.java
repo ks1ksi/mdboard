@@ -1,6 +1,7 @@
 package com.example.mdboard.answer;
 
 import com.example.mdboard.question.Question;
+import com.example.mdboard.user.SiteUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,9 @@ public class Answer {
 
     @ManyToOne
     private Question question;
+
+    @ManyToOne
+    private SiteUser author;
 
     public void setMyQuestion(Question question) {
         this.question = question;

@@ -1,6 +1,8 @@
 package com.example.mdboard.question;
 
 import com.example.mdboard.answer.AnswerForm;
+import com.example.mdboard.user.SiteUser;
+import com.example.mdboard.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,6 +19,7 @@ import javax.validation.Valid;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final UserService userService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
@@ -37,11 +41,12 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String createQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+    public String createQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
+        SiteUser user = userService.getUser(principal.getName());
         if (bindingResult.hasErrors()) {
             return "question_form";
         }
-        questionService.create(questionForm.getSubject(), questionForm.getContent());
+        questionService.create(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/list";
     }
 

@@ -1,8 +1,11 @@
 package com.example.mdboard.user;
 
+import com.example.mdboard.ex.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,4 +23,11 @@ public class UserService {
         return user;
     }
 
+    public SiteUser getUser(String username) {
+        Optional<SiteUser> siteUser = userRepository.findByUsername(username);
+        if (siteUser.isEmpty()) {
+            throw new DataNotFoundException("siteUser not found");
+        }
+        return siteUser.get();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.mdboard.question;
 
 import com.example.mdboard.ex.DataNotFoundException;
+import com.example.mdboard.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,11 +36,12 @@ public class QuestionService {
         return questionRepository.findAll(pageable);
     }
 
-    public Question create(String subject, String content) {
+    public Question create(String subject, String content, SiteUser author) {
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
         question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(author);
         questionRepository.save(question);
         return question;
     }
