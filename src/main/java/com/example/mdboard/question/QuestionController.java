@@ -5,11 +5,13 @@ import com.example.mdboard.user.SiteUser;
 import com.example.mdboard.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -51,6 +53,32 @@ public class QuestionController {
         }
         questionService.create(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/list";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String modifyQuestion(QuestionForm questionForm, @PathVariable("id") Long id, Principal principal) {
+        Question question = questionService.getQuestion(id);
+        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        questionForm.setSubject(question.getSubject());
+        questionForm.setContent(question.getContent());
+        return "question_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String modifyQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult, @PathVariable("id") Long id, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "question_form";
+        }
+        Question question = questionService.getQuestion(id);
+        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+        }
+        questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
+        return "redirect:/question/detail/" + id;
     }
 
 }
