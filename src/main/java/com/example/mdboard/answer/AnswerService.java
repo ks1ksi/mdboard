@@ -1,5 +1,6 @@
 package com.example.mdboard.answer;
 
+import com.example.mdboard.ex.DataNotFoundException;
 import com.example.mdboard.question.Question;
 import com.example.mdboard.user.SiteUser;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,4 +27,17 @@ public class AnswerService {
         return answer;
     }
 
+    public Answer getAnswer(Long id) {
+        Optional<Answer> answer = answerRepository.findById(id);
+        if (answer.isEmpty()) {
+            throw new DataNotFoundException("answer not found");
+        }
+        return answer.get();
+    }
+
+    public void modify(Answer answer, String content) {
+        answer.setContent(content);
+        answer.setModifyDate(LocalDateTime.now());
+        answerRepository.save(answer);
+    }
 }
